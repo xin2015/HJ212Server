@@ -57,20 +57,9 @@ namespace HJ212Server.Core
         /// </summary>
         protected string CPString { get; set; }
 
-        //public DataSegment(SystemCode systemCode, CommandCode commandCode, string password, string uniqueCode, List<Dictionary<string,object>> cp)
-        //{
-        //    QN = DateTime.Now;
-        //    ST= systemCode;
-        //    CN = commandCode;
-        //    PW = password;
-        //    MN = uniqueCode;
-        //    CP = cp;
-        //    CPString = 
-        //}
-
-        public DataSegment(DateTime time, SystemCode systemCode, CommandCode commandCode, string password, string uniqueCode, Flag flag, int? packetNumber, int? packetNO, List<Dictionary<string, object>> cp)
+        public DataSegment(SystemCode systemCode, CommandCode commandCode, string password, string uniqueCode, Flag flag, int? packetNumber, int? packetNO, List<Dictionary<string, object>> cp)
         {
-            QN = time;
+            QN = DateTime.Now;
             ST = systemCode;
             CN = commandCode;
             PW = password;
@@ -79,15 +68,15 @@ namespace HJ212Server.Core
             PNUM = packetNumber;
             PNO = packetNO;
             CP = cp;
-            CPString = string.Format("&&{0}&&", string.Join(ProjectSeparator, CP.Select(x => string.Join(CategorySeparator, x.Select(y => string.Join(FieldSeparator, y.Key, y.Value))))));
+            CPString = CPToString(cp);
         }
 
         public override string? ToString()
         {
             List<string> list = new List<string>();
             list.Add(string.Join(FieldSeparator, "QN", QN.ToString("yyyyMMddHHmmssfff")));
-            list.Add(string.Join(FieldSeparator, "ST", ST));
-            list.Add(string.Join(FieldSeparator, "CN", CN));
+            list.Add(string.Join(FieldSeparator, "ST", ((int)ST)));
+            list.Add(string.Join(FieldSeparator, "CN", ((int)CN)));
             list.Add(string.Join(FieldSeparator, "PW", PW));
             list.Add(string.Join(FieldSeparator, "MN", MN));
             list.Add(string.Join(FieldSeparator, "Flag", Flag));
@@ -98,6 +87,11 @@ namespace HJ212Server.Core
             }
             list.Add(string.Join(FieldSeparator, "CP", CPString));
             return string.Join(ProjectSeparator, list);
+        }
+
+        public static string CPToString(List<Dictionary<string, object>> cp)
+        {
+            return string.Format("&&{0}&&", string.Join(ProjectSeparator, cp.Select(x => string.Join(CategorySeparator, x.Select(y => string.Join(FieldSeparator, y.Key, y.Value))))));
         }
     }
 }

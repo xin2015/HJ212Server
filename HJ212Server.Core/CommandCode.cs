@@ -12,6 +12,10 @@ namespace HJ212Server.Core
     public enum CommandCode
     {
         /// <summary>
+        /// 设置超时时间及重发次数
+        /// </summary>
+        SetTimeoutPeriodAndRetransmission = 1000,
+        /// <summary>
         /// 提取/上传下位机（现场机）时间
         /// </summary>
         GetSlaveDeviceTime = 1011,
@@ -42,6 +46,16 @@ namespace HJ212Server.Core
         /// <summary>
         /// 设置下位机（现场机）密码
         /// </summary>
-        SetSlaveDevicePassword = 1072
+        SetSlaveDevicePassword = 1072,
+        /// <summary>
+        /// 获取污染物实时数据
+        /// </summary>
+        GetPollutantLiveData = 2011,
+        /// <summary>
+        /// 停止获取污染物实时数据
+        /// </summary>
+        StopPollutantLiveData = 2012
+
+
     }
 }

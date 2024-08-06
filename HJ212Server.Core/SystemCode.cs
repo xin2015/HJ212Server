@@ -24,6 +24,10 @@ namespace HJ212Server.Core
         /// </summary>
         AcousticEnvironmentQualityMonitoring = 23,
         /// <summary>
+        /// 地表水体环境污染源
+        /// </summary>
+        SurfaceWaterEnvironmentPollutantSource = 32,
+        /// <summary>
         /// 系统交互
         /// </summary>
         SystemInteraction = 91
