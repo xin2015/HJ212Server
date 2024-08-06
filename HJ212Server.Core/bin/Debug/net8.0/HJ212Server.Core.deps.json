@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "HJ212Server.Core/1.0.0": {
+        "runtime": {
+          "HJ212Server.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "HJ212Server.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
