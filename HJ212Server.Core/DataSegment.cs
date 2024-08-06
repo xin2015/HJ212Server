@@ -57,6 +57,17 @@ namespace HJ212Server.Core
         /// </summary>
         protected string CPString { get; set; }
 
+        //public DataSegment(SystemCode systemCode, CommandCode commandCode, string password, string uniqueCode, List<Dictionary<string,object>> cp)
+        //{
+        //    QN = DateTime.Now;
+        //    ST= systemCode;
+        //    CN = commandCode;
+        //    PW = password;
+        //    MN = uniqueCode;
+        //    CP = cp;
+        //    CPString = 
+        //}
+
         public DataSegment(DateTime time, SystemCode systemCode, CommandCode commandCode, string password, string uniqueCode, Flag flag, int? packetNumber, int? packetNO, List<Dictionary<string, object>> cp)
         {
             QN = time;

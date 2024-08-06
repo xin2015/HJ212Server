@@ -30,17 +30,18 @@ namespace HJ212Server.Core
             Version = HJ2122017;
         }
 
-        public Flag(string version, bool d, bool a)
+        public Flag(bool d, bool a)
         {
-            Version = version;
+            Version = HJ2122017;
             D = d;
             A = a;
         }
 
         public override string? ToString()
         {
-            string flag = string.Join(string.Empty, Version, D, A);
-            return flag;
+            string flag = string.Join(string.Empty, Version, D ? 1 : 0, A ? 1 : 0);
+            int flagInt = Convert.ToInt32(flag, 2);
+            return flagInt.ToString();
         }
     }
 }
