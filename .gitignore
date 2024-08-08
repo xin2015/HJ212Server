@@ -197,3 +197,4 @@
 /HJ212Server.WorkerService/bin/Debug/net8.0
 /HJ212Server.WorkerService/bin/Release/net8.0
 /HJ212Server.WorkerService/Properties/PublishProfiles
+/HJ212Server.WorkerService/appsettings.Development.json
