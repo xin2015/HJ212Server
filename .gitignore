@@ -184,3 +184,16 @@
 /HJ212Server.Core/obj/project.nuget.cache
 /HJ212Server.WorkerService/obj/Debug/net8.0
 /HJ212Server.WorkerService/obj
+/HJ212Server.Console/bin/Release/net8.0/publish
+/HJ212Server.Console/bin/Release/net8.0
+/HJ212Server.Console/obj/Release/net8.0
+/HJ212Server.Console/Properties/PublishProfiles
+/HJ212Server.Core/bin/Release/net8.0
+/HJ212Server.Core/obj/Release/net8.0/ref
+/HJ212Server.Core/obj/Release/net8.0/refint
+/HJ212Server.Core/obj/Release/net8.0
+/HJ212Server.Test/bin/Release/net8.0
+/HJ212Server.Test/obj/Release/net8.0
+/HJ212Server.WorkerService/bin/Debug/net8.0
+/HJ212Server.WorkerService/bin/Release/net8.0
+/HJ212Server.WorkerService/Properties/PublishProfiles
