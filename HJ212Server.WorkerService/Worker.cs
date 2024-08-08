@@ -10,6 +10,8 @@ namespace HJ212Server.WorkerService
         private readonly IConfiguration _configuration;
         private readonly int _port;
         private readonly int _maxClientCount;
+        private readonly int _bufferSize;
+        private int _currentClientCount;
 
         public Worker(ILogger<Worker> logger, IConfiguration configuration)
         {
@@ -23,6 +25,11 @@ namespace HJ212Server.WorkerService
             {
                 _maxClientCount = 100;
             }
+            if (!int.TryParse(_configuration["BufferSize"], out _bufferSize))
+            {
+                _bufferSize = 1024;
+            }
+            _currentClientCount = 0;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -42,13 +49,17 @@ namespace HJ212Server.WorkerService
             try
             {
                 using TcpListener listener = new TcpListener(IPAddress.Any, _port);
-                listener.Start(_maxClientCount);
+                listener.Start();
                 List<Task> taskList = new List<Task>();
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    TcpClient client = await listener.AcceptTcpClientAsync();
-                    taskList.Add(ReceiveAsync(client, stoppingToken));
-                    _logger.LogInformation("Accept {0} TcpClients.", taskList.Count);
+                    if (_currentClientCount != _maxClientCount)
+                    {
+                        TcpClient client = await listener.AcceptTcpClientAsync();
+                        Interlocked.Increment(ref _currentClientCount);
+                        taskList.Add(ReceiveAsync(client, stoppingToken));
+                        _logger.LogInformation("Accept {0} TcpClients and {1} TcpClients active.", taskList.Count, _currentClientCount);
+                    }
                 }
                 Task.WaitAll(taskList.ToArray());
                 listener.Stop();
@@ -63,7 +74,7 @@ namespace HJ212Server.WorkerService
         {
             try
             {
-                byte[] bytes = new byte[1024];
+                byte[] bytes = new byte[_bufferSize];
                 int i;
                 string message;
                 while (!stoppingToken.IsCancellationRequested)
@@ -76,7 +87,7 @@ namespace HJ212Server.WorkerService
                     }
                     else
                     {
-                        message = Encoding.ASCII.GetString(bytes);
+                        message = Encoding.ASCII.GetString(bytes, 0, i);
                         _logger.LogInformation(message);
                     }
                 }
@@ -88,6 +99,7 @@ namespace HJ212Server.WorkerService
             finally
             {
                 client.Dispose();
+                Interlocked.Decrement(ref _currentClientCount);
             }
         }
     }
