@@ -80,7 +80,7 @@ namespace HJ212Server.Core
             list.Add($"PW{FieldSeparator}{PW}");
             list.Add($"MN{FieldSeparator}{MN}");
             list.Add($"Flag{FieldSeparator}{Flag}");
-            if (Flag.D)
+            if (Flag.D == 1)
             {
                 list.Add($"PNUM{FieldSeparator}{PNUM}");
                 list.Add($"PNO{FieldSeparator}{PNO}");
@@ -93,5 +93,10 @@ namespace HJ212Server.Core
         {
             return $"&&{string.Join(ProjectSeparator, cp.Select(x => string.Join(CategorySeparator, x.Select(y => $"{y.Key}{FieldSeparator}{y.Value}"))))}&&";
         }
+
+        //public static bool TryParse(string dataSegmentString, out DataSegment dataSegment)
+        //{
+
+        //}
     }
 }

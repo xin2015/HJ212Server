@@ -14,8 +14,50 @@ namespace HJ212Server.Test
         [TestMethod]
         public void TestToString()
         {
-            Flag flag = new Flag(false, true);
+            Flag flag = new Flag(1, 0, 1);
             Assert.AreEqual(flag.ToString(), "5");
+        }
+
+        [TestMethod]
+        public void TestTryParse()
+        {
+            string flagString = "4";
+            Flag flag;
+            if (Flag.TryParse(flagString, out flag))
+            {
+                Assert.IsTrue(flag.D == 0 && flag.A == 0);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+            flagString = "5";
+            if (Flag.TryParse(flagString, out flag))
+            {
+                Assert.IsTrue(flag.D == 0 && flag.A == 1);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+            flagString = "6";
+            if (Flag.TryParse(flagString, out flag))
+            {
+                Assert.IsTrue(flag.D == 1 && flag.A == 0);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+            flagString = "7";
+            if (Flag.TryParse(flagString, out flag))
+            {
+                Assert.IsTrue(flag.D == 1 && flag.A == 1);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

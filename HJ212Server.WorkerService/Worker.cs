@@ -44,9 +44,9 @@ namespace HJ212Server.WorkerService
             while (!stoppingToken.IsCancellationRequested)
             {
                 Task acceptTask = AcceptAsync(stoppingToken);
-                Task sendTask = SendAsync(stoppingToken);
+                //Task sendTask = SendAsync(stoppingToken);
                 await acceptTask;
-                await sendTask;
+                //await sendTask;
             }
         }
 
@@ -133,48 +133,48 @@ namespace HJ212Server.WorkerService
             }
         }
 
-        protected virtual async Task SendAsync(CancellationToken stoppingToken)
-        {
-            try
-            {
-                List<Task> taskList = new List<Task>();
-                int i = 0;
-                while (!stoppingToken.IsCancellationRequested && i++ < _maxClientCount)
-                {
-                    taskList.Add(SendSlaveDeviceTimeCalibrationAsync(stoppingToken));
-                }
-                Task.WaitAll(taskList.ToArray());
-                await Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "SendAsync error.");
-            }
-        }
+        //protected virtual async Task SendAsync(CancellationToken stoppingToken)
+        //{
+        //    try
+        //    {
+        //        List<Task> taskList = new List<Task>();
+        //        int i = 0;
+        //        while (!stoppingToken.IsCancellationRequested && i++ < _maxClientCount)
+        //        {
+        //            taskList.Add(SendSlaveDeviceTimeCalibrationAsync(stoppingToken));
+        //        }
+        //        Task.WaitAll(taskList.ToArray());
+        //        await Task.CompletedTask;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "SendAsync error.");
+        //    }
+        //}
 
-        protected virtual async Task SendSlaveDeviceTimeCalibrationAsync(CancellationToken stoppingToken)
-        {
-            try
-            {
-                using TcpClient client = new TcpClient();
-                await client.ConnectAsync("localhost", _port);
-                string uniqueCode = Guid.NewGuid().ToString();
-                byte[] bytes;
-                Flag flag = new Flag(false, true);
-                DataSegment dataSegment;
-                int i = 0;
-                while (!stoppingToken.IsCancellationRequested && i++ < 1000)
-                {
-                    dataSegment = new DataSegment(SystemCode.SystemInteraction, CommandCode.SlaveDeviceTimeCalibration, _password, uniqueCode, flag, 0, 0, new List<Dictionary<string, object>>());
-                    bytes = Encoding.ASCII.GetBytes(dataSegment.ToString() ?? "Nothing");
-                    await client.Client.SendAsync(bytes, stoppingToken);
-                    await Task.Delay(1000);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "SendSlaveDeviceTimeCalibrationAsync error.");
-            }
-        }
+        //protected virtual async Task SendSlaveDeviceTimeCalibrationAsync(CancellationToken stoppingToken)
+        //{
+        //    try
+        //    {
+        //        using TcpClient client = new TcpClient();
+        //        await client.ConnectAsync("localhost", _port);
+        //        string uniqueCode = Guid.NewGuid().ToString();
+        //        byte[] bytes;
+        //        Flag flag = new Flag(false, true);
+        //        DataSegment dataSegment;
+        //        int i = 0;
+        //        while (!stoppingToken.IsCancellationRequested && i++ < 1000)
+        //        {
+        //            dataSegment = new DataSegment(SystemCode.SystemInteraction, CommandCode.SlaveDeviceTimeCalibration, _password, uniqueCode, flag, 0, 0, new List<Dictionary<string, object>>());
+        //            bytes = Encoding.ASCII.GetBytes(dataSegment.ToString() ?? "Nothing");
+        //            await client.Client.SendAsync(bytes, stoppingToken);
+        //            await Task.Delay(1000);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "SendSlaveDeviceTimeCalibrationAsync error.");
+        //    }
+        //}
     }
 }

@@ -14,7 +14,7 @@ namespace HJ212Server.Test
         [TestMethod]
         public void TestToString()
         {
-            DataSegment dataSegment = new DataSegment(SystemCode.SurfaceWaterEnvironmentPollutantSource, CommandCode.GetPollutantLiveData, "123456", "010000A8900016F000169DC0", new Flag(false, true), 0, 0, new List<Dictionary<string, object>>());
+            DataSegment dataSegment = new DataSegment(SystemCode.SurfaceWaterEnvironmentPollutantSource, CommandCode.GetPollutantLiveData, "123456", "010000A8900016F000169DC0", new Flag(1, 0, 1), 0, 0, new List<Dictionary<string, object>>());
             string dataSegmentString = dataSegment.ToString();
         }
     }
