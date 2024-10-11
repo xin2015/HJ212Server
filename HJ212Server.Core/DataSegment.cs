@@ -74,24 +74,24 @@ namespace HJ212Server.Core
         public override string? ToString()
         {
             List<string> list = new List<string>();
-            list.Add(string.Join(FieldSeparator, "QN", QN.ToString("yyyyMMddHHmmssfff")));
-            list.Add(string.Join(FieldSeparator, "ST", ((int)ST)));
-            list.Add(string.Join(FieldSeparator, "CN", ((int)CN)));
-            list.Add(string.Join(FieldSeparator, "PW", PW));
-            list.Add(string.Join(FieldSeparator, "MN", MN));
-            list.Add(string.Join(FieldSeparator, "Flag", Flag));
+            list.Add($"QN{FieldSeparator}{QN:yyyyMMddHHmmssfff}");
+            list.Add($"ST{FieldSeparator}{(int)ST}");
+            list.Add($"CN{FieldSeparator}{(int)CN}");
+            list.Add($"PW{FieldSeparator}{PW}");
+            list.Add($"MN{FieldSeparator}{MN}");
+            list.Add($"Flag{FieldSeparator}{Flag}");
             if (Flag.D)
             {
-                list.Add(string.Join(FieldSeparator, "PNUM", PNUM));
-                list.Add(string.Join(FieldSeparator, "PNO", PNO));
+                list.Add($"PNUM{FieldSeparator}{PNUM}");
+                list.Add($"PNO{FieldSeparator}{PNO}");
             }
-            list.Add(string.Join(FieldSeparator, "CP", CPString));
+            list.Add($"CP{FieldSeparator}{CPString}");
             return string.Join(ProjectSeparator, list);
         }
 
         public static string CPToString(List<Dictionary<string, object>> cp)
         {
-            return string.Format("&&{0}&&", string.Join(ProjectSeparator, cp.Select(x => string.Join(CategorySeparator, x.Select(y => string.Join(FieldSeparator, y.Key, y.Value))))));
+            return $"&&{string.Join(ProjectSeparator, cp.Select(x => string.Join(CategorySeparator, x.Select(y => $"{y.Key}{FieldSeparator}{y.Value}"))))}&&";
         }
     }
 }

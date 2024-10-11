@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HJ212Server.Console", "HJ21
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HJ212Server.Test", "HJ212Server.Test\HJ212Server.Test.csproj", "{AC365A14-2C1A-49AA-87BE-26C7B0885E19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJ212Server.WorkerService", "HJ212Server.WorkerService\HJ212Server.WorkerService.csproj", "{AC41B2D9-A1A0-472C-B25E-907617C35310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HJ212Server.WorkerService", "HJ212Server.WorkerService\HJ212Server.WorkerService.csproj", "{AC41B2D9-A1A0-472C-B25E-907617C35310}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

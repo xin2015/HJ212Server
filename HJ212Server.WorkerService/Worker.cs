@@ -1,3 +1,4 @@
+using HJ212Server.Core;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -12,6 +13,7 @@ namespace HJ212Server.WorkerService
         private readonly int _maxClientCount;
         private readonly int _bufferSize;
         private int _currentClientCount;
+        private readonly string _password;
 
         public Worker(ILogger<Worker> logger, IConfiguration configuration)
         {
@@ -30,17 +32,21 @@ namespace HJ212Server.WorkerService
                 _bufferSize = 1024;
             }
             _currentClientCount = 0;
+            _password = _configuration["Password"] ?? "123456";
+            if (string.IsNullOrEmpty(_password))
+            {
+                _password = "123456";
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
-                await AcceptAsync(stoppingToken);
+                Task acceptTask = AcceptAsync(stoppingToken);
+                Task sendTask = SendAsync(stoppingToken);
+                await acceptTask;
+                await sendTask;
             }
         }
 
@@ -100,6 +106,50 @@ namespace HJ212Server.WorkerService
             {
                 client.Dispose();
                 Interlocked.Decrement(ref _currentClientCount);
+            }
+        }
+
+        protected virtual async Task SendAsync(CancellationToken stoppingToken)
+        {
+            try
+            {
+                List<Task> taskList = new List<Task>();
+                int i = 0;
+                while (!stoppingToken.IsCancellationRequested && i++ < _maxClientCount)
+                {
+                    taskList.Add(SendSlaveDeviceTimeCalibrationAsync(stoppingToken));
+                }
+                Task.WaitAll(taskList.ToArray());
+                await Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SendAsync error.");
+            }
+        }
+
+        protected virtual async Task SendSlaveDeviceTimeCalibrationAsync(CancellationToken stoppingToken)
+        {
+            try
+            {
+                using TcpClient client = new TcpClient();
+                await client.ConnectAsync("localhost", _port);
+                string uniqueCode = Guid.NewGuid().ToString();
+                byte[] bytes;
+                Flag flag = new Flag(false, true);
+                DataSegment dataSegment;
+                int i = 0;
+                while (!stoppingToken.IsCancellationRequested && i++ < 1000)
+                {
+                    dataSegment = new DataSegment(SystemCode.SystemInteraction, CommandCode.SlaveDeviceTimeCalibration, _password, uniqueCode, flag, 0, 0, new List<Dictionary<string, object>>());
+                    bytes = Encoding.ASCII.GetBytes(dataSegment.ToString() ?? "Nothing");
+                    await client.Client.SendAsync(bytes, stoppingToken);
+                    await Task.Delay(1000);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SendSlaveDeviceTimeCalibrationAsync error.");
             }
         }
     }
