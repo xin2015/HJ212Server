@@ -63,7 +63,7 @@ namespace HJ212Server.WorkerService
                     {
                         TcpClient client = await listener.AcceptTcpClientAsync();
                         Interlocked.Increment(ref _currentClientCount);
-                        taskList.Add(ReceiveAsync(client, stoppingToken));
+                        taskList.Add(Task.Run(() => ReceiveAsync(client, stoppingToken), stoppingToken));
                         _logger.LogInformation("Accept {0} TcpClients and {1} TcpClients active.", taskList.Count, _currentClientCount);
                     }
                 }
@@ -76,13 +76,17 @@ namespace HJ212Server.WorkerService
             }
         }
 
+
         protected virtual async Task ReceiveAsync(TcpClient client, CancellationToken stoppingToken)
         {
             try
             {
+                StringBuilder stringBuilder = new StringBuilder();
                 byte[] bytes = new byte[_bufferSize];
                 int i;
                 string message;
+                int tailIndex;
+                int communicationPacketLength;
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     i = await client.Client.ReceiveAsync(bytes, stoppingToken);
@@ -95,6 +99,26 @@ namespace HJ212Server.WorkerService
                     {
                         message = Encoding.ASCII.GetString(bytes, 0, i);
                         _logger.LogInformation(message);
+                        stringBuilder.Append(message);
+                        message = stringBuilder.ToString();
+                        tailIndex = message.IndexOf(CommunicationPacket.TailConst);
+                        while (tailIndex >= 0)
+                        {
+                            communicationPacketLength = tailIndex + CommunicationPacket.TailConst.Length;
+                            CommunicationPacket communicationPacket;
+                            //if (CommunicationPacket.TryParse(message.Substring(0, communicationPacketLength), out communicationPacket))
+                            //{
+                            //    // TODO
+                            //    stringBuilder.Remove(0, communicationPacketLength);
+                            //    message = stringBuilder.ToString();
+                            //    tailIndex = message.IndexOf(CommunicationPacket.TailConst);
+                            //}
+                        }
+                        if (tailIndex > 0)
+                        {
+
+                        }
+
                     }
                 }
             }

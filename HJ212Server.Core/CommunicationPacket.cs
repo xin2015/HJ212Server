@@ -7,6 +7,8 @@ namespace HJ212Server.Core
     /// </summary>
     public class CommunicationPacket
     {
+        public const string HeadConst = "##";
+        public const string TailConst = "\r\n";
         /// <summary>
         /// 包头
         /// </summary>
@@ -35,12 +37,12 @@ namespace HJ212Server.Core
 
         public CommunicationPacket(DataSegment dataSegment)
         {
-            Head = "##";
+            Head = HeadConst;
             DataSegmentString = dataSegment.ToString();
             DataSegmentLength = DataSegmentString.Length;
             DataSegment = dataSegment;
             CRC = ComputeCRC(DataSegmentString);
-            Tail = "\r\n";
+            Tail = TailConst;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace HJ212Server.Core
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public string ComputeCRC(string text)
+        public static string ComputeCRC(string text)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(text);
             int crc = CRCHelper.ComputeCRC16(bytes);
@@ -59,5 +61,26 @@ namespace HJ212Server.Core
         {
             return string.Join(string.Empty, Head, DataSegmentLength.ToString("D4"), DataSegmentString, CRC, Tail);
         }
+
+        //public static bool TryParse(string communicationPacketString, out CommunicationPacket communicationPacket)
+        //{
+        //    if (communicationPacketString.StartsWith(HeadConst) && communicationPacketString.EndsWith(TailConst))
+        //    {
+        //        string dataSegmentLengthString = communicationPacketString.Substring(HeadConst.Length, 4);
+        //        string dataSegmentString = communicationPacketString.Substring(HeadConst.Length + 4, communicationPacketString.Length - HeadConst.Length - 4 - 4 - TailConst.Length);
+        //        string crcString = communicationPacketString.Substring(communicationPacketString.Length - TailConst.Length - 4, 4);
+        //        int dataSegmentLength;
+        //        if(int.TryParse(dataSegmentLengthString,out dataSegmentLength)&&dataSegmentLength == dataSegmentString.Length)
+        //        {
+        //            if(crcString == ComputeCRC(dataSegmentString))
+        //            {
+        //                // TODO
+        //                communicationPacket = new CommunicationPacket();
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    return false;
+        //}
     }
 }
