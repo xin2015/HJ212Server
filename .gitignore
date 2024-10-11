@@ -198,3 +198,8 @@
 /HJ212Server.WorkerService/bin/Release/net8.0
 /HJ212Server.WorkerService/Properties/PublishProfiles
 /HJ212Server.WorkerService/appsettings.Development.json
+/.vs/ProjectEvaluation
+/HJ212Server.Console/bin/Debug/net8.0/HJ212Server.Console.deps.json
+/HJ212Server.Console/obj/HJ212Server.Console.csproj.nuget.g.props
+/HJ212Server.Core/obj/Debug/net8.0/HJ212Server.Core.csproj.CoreCompileInputs.cache
+/HJ212Server.Core/obj/HJ212Server.Core.csproj.nuget.g.props
